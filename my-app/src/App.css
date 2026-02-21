@@ -1,0 +1,15 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.menu__logo {
+    height: 100%;
+    
+    img {
+        height: 100%;
+    }
+}
+
+.menu__login {
+    margin-left: auto !important;
+}
