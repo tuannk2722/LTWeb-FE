@@ -32,12 +32,12 @@ function SearchForm() {
     // Hàm tìm kiếm theo job tag
     const handleClick = (e) => {
         const industry = e.target.textContent;
-        navigate(`/search?keyword=${industry}&city=`);
+        navigate(`/listJobFound?keyword=${industry}&city=`);
     }
 
     // Hàm tìm kiếm theo ô search
     const onFinish = (e) => {
-        navigate(`/search?keyword=${e.keyword || ""}&city=${e.city || ""}`);
+        navigate(`/listJobFound?keyword=${e.keyword || ""}&city=${e.city || ""}`);
     }
 
     return (
