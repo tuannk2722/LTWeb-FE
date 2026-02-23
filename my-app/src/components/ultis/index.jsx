@@ -11,7 +11,7 @@ export const post = async (path, data) => {
         method: "POST",
         headers: {
             Accept: "application/json", 
-            "Content-Typpe": "application/json"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
@@ -24,7 +24,7 @@ export const patch = async (path, data) => {
         method: "PATCH",
         headers: {
             Accept: "application/json", 
-            "Content-Typpe": "application/json"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
