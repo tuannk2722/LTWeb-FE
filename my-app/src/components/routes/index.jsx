@@ -3,7 +3,9 @@ import Home from "../../pages/Home";
 import JobDetail from "../../pages/JobDetail";
 import ListJobFound from "../../pages/ListJobFound";
 import Login from "../../pages/Login";
+import Logout from "../../pages/Logout";
 import Register from "../../pages/Register";
+import PrivatePages from "../../PrivatePage";
 import LayoutDetaul from "../LayoutDefault";
 
 export const routes = [
@@ -34,6 +36,15 @@ export const routes = [
             {
                 path: "listJobFound",
                 element: <ListJobFound />
+            }
+        ]
+    },
+    {
+        element: <PrivatePages />,
+        children: [
+            {
+                path: "logout",
+                element: <Logout />
             }
         ]
     }

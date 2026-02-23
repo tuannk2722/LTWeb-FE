@@ -3,11 +3,13 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { LoginOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import logo from "../../image/logo.jpg";
+import { getCookieValue } from "../helpers/cookie";
 
 const { Header, Content, Footer } = Layout;
 
 function LayoutDefault() {
     const [current, setCurrent] = useState('home')
+    const isLogin = getCookieValue("token");
     const location = useLocation();
 
     useEffect(() => {
@@ -54,7 +56,7 @@ function LayoutDefault() {
                         <img src={logo} alt="Logo" />
                     </Link>
                     <Menu 
-                        items={items}
+                        items={isLogin ? itemsLogin : items}
                         mode="horizontal"
                         selectedKeys={[current]}
                         style={{ flex: 1, minWidth: 0 }}
