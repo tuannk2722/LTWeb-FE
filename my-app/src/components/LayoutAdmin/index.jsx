@@ -17,12 +17,12 @@ const items1 = [
 const items2 = [
     {
         key: "dashboard",
-        label: <Link to="dashboard">Tổng quan</Link>,
+        label: <Link to="/dashboard">Tổng quan</Link>,
         icon: <LaptopOutlined />
     },
     {
         key: "infoCompany",
-        label: <Link to="infoCompany">Thông tin công ty</Link>,
+        label: <Link to="inforCompany">Thông tin công ty</Link>,
         icon: <SnippetsOutlined />
     },
     {

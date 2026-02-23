@@ -1,4 +1,5 @@
 import HomeAdmin from "../../dashboard/Home";
+import InforCompany from "../../dashboard/inforCompany";
 import CompanyDetail from "../../pages/CompanyDetail";
 import Home from "../../pages/Home";
 import JobDetail from "../../pages/JobDetail";
@@ -49,11 +50,16 @@ export const routes = [
                 element: <Logout />
             },
             {
+                path: "dashboard",
                 element: <LayoutAdmin />,
                 children: [
                     {
-                        path: "dashboard",
+                        index: true,
                         element: <HomeAdmin />
+                    },
+                    {
+                        path: "inforCompany",
+                        element: <InforCompany />
                     }
                 ]
             }
