@@ -32,7 +32,7 @@ export const routes = [
                 element: <JobDetail />
             },
             {
-                path: "ListJobFound",
+                path: "listJobFound",
                 element: <ListJobFound />
             }
         ]
