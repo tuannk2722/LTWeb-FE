@@ -6,6 +6,7 @@ import Login from "../../pages/Login";
 import Logout from "../../pages/Logout";
 import Register from "../../pages/Register";
 import PrivatePages from "../../PrivatePage";
+import LayoutAdmin from "../LayoutAdmin";
 import LayoutDetaul from "../LayoutDefault";
 
 export const routes = [
@@ -45,6 +46,10 @@ export const routes = [
             {
                 path: "logout",
                 element: <Logout />
+            },
+            {
+                path: "dashboard",
+                element: <LayoutAdmin />,
             }
         ]
     }
