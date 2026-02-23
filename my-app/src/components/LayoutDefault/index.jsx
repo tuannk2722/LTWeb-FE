@@ -1,6 +1,6 @@
 import { Layout, Menu } from "antd";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
+import { LoginOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import logo from "../../image/logo.jpg";
 
@@ -29,6 +29,20 @@ function LayoutDefault() {
             key: "register",
             icon: <LogoutOutlined />,
             label: <Link to="register">Đăng ký</Link>
+        }
+    ]
+
+    const itemsLogin = [
+        {
+            key: "dashboard",
+            label: <Link to="dashboard">Quản lý</Link>,
+            icon: <UserOutlined />, 
+            className: "menu__login",
+        },
+        {
+            key: "logout",
+            icon: <LogoutOutlined />,
+            label: <Link to="logout">Đăng xuất</Link>
         }
     ]
 
