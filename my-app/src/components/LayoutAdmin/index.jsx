@@ -1,5 +1,5 @@
 import { Layout, Menu } from "antd";
-import { LogoutOutlined, LaptopOutlined, CopyOutlined, FormOutlined, SnippetsOutlined, UserOutlined } from "@ant-design/icons";
+import { LogoutOutlined, LaptopOutlined, CopyOutlined, FormOutlined, SnippetsOutlined } from "@ant-design/icons";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import logo from "../../image/logo.jpg";
@@ -8,21 +8,16 @@ const { Header, Content, Sider } = Layout;
 
 const items1 = [
     {
-        key: "dashboard",
-        label: <Link to="dashboard">Quản lý</Link>,
-        icon: <UserOutlined />,
-        className: "menu__login",
-    },
-    {
         key: "logout",
         icon: <LogoutOutlined />,
-        label: <Link to="logout">Đăng xuất</Link>
+        label: <Link to="logout">Đăng xuất</Link>,
+        className: "menu__login"
     }
 ]
 const items2 = [
     {
-        key: "homeAdmin",
-        label: <Link to="homeAdmin">Tổng quan</Link>,
+        key: "dashboard",
+        label: <Link to="dashboard">Tổng quan</Link>,
         icon: <LaptopOutlined />
     },
     {

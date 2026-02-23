@@ -49,7 +49,6 @@ export const routes = [
                 element: <Logout />
             },
             {
-                // path: "dashboard",
                 element: <LayoutAdmin />,
                 children: [
                     {
