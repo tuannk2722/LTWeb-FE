@@ -1,3 +1,4 @@
+import HomeAdmin from "../../dashboard/Home";
 import CompanyDetail from "../../pages/CompanyDetail";
 import Home from "../../pages/Home";
 import JobDetail from "../../pages/JobDetail";
@@ -48,8 +49,14 @@ export const routes = [
                 element: <Logout />
             },
             {
-                path: "dashboard",
+                // path: "dashboard",
                 element: <LayoutAdmin />,
+                children: [
+                    {
+                        path: "dashboard",
+                        element: <HomeAdmin />
+                    }
+                ]
             }
         ]
     }
