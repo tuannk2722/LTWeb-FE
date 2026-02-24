@@ -1,5 +1,7 @@
 import HomeAdmin from "../../dashboard/Home";
 import InforCompany from "../../dashboard/inforCompany";
+import ManageCV from "../../dashboard/ManageCV";
+import DetailCV from "../../dashboard/ManageCV/DetailCV";
 import CompanyDetail from "../../pages/CompanyDetail";
 import Home from "../../pages/Home";
 import JobDetail from "../../pages/JobDetail";
@@ -60,6 +62,14 @@ export const routes = [
                     {
                         path: "inforCompany",
                         element: <InforCompany />
+                    },
+                    {
+                        path: "manageCV",
+                        element: <ManageCV />
+                    },
+                    {
+                        path: "manageCV/detailCV/:id",
+                        element: <DetailCV />
                     }
                 ]
             }

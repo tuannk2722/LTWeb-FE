@@ -2,15 +2,13 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GetJobById } from "../../../components/services/jobs";
 import { ChangeStatusRead, GetCVById } from "../../../components/services/cv";
-import { Row, Col, Card, Tag, List } from "antd";
-import { EuroOutlined, FieldTimeOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { Row, Col, Card } from "antd";
+import Detail from "../../../pages/JobDetail/Detail";
 
 function DetailCV() {
     const { id } = useParams();
     const [dataCV, setDataCV] = useState([]);
     const [dataJob, setDataJob] = useState({});
-
-    const styleIconsJob = { fontSize: 25, marginTop: 10, marginRight: 10 }
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -25,7 +23,7 @@ function DetailCV() {
 
     return (
         <>
-            {dataCV && (
+            {dataCV && dataJob && (
                 <Row gutter={[20, 20]}>
                     {/* Thong tin ung vien */}
                     <Col span={24}>
@@ -45,71 +43,7 @@ function DetailCV() {
 
                     {/* Thong tin job ma ung vien da nop don vao */}
                     <Col span={24}>
-                        <Card title={<h3>{dataJob.name}</h3>} style={{ width: "100%" }}>
-                            <Row gutter={[20, 10]}>
-                                <Col xxl={8} xl={8} lg={8} md={8} sm={24} xs={24} style={{ display: "flex" }}>
-                                    <span style={styleIconsJob}>
-                                        <EuroOutlined />
-                                    </span>
-                                    <div>
-                                        <div>Mức lương</div>
-                                        <div><h4>{dataJob.salary}</h4></div>
-                                    </div>
-                                </Col>
-
-                                <Col xxl={8} xl={8} lg={8} md={8} sm={24} xs={24} style={{ display: "flex" }}>
-                                    <span style={styleIconsJob}>
-                                        <FieldTimeOutlined />
-                                    </span>
-                                    <div>
-                                        <div>Ngày cập nhật</div>
-                                        <div><h4>{dataJob.updateAt}</h4></div>
-                                    </div>
-                                </Col>
-
-                                <Col xxl={8} xl={8} lg={8} md={8} sm={24} xs={24} style={{ display: "flex" }}>
-                                    <span style={styleIconsJob}>
-                                        <EnvironmentOutlined />
-                                    </span>
-                                    <div>
-                                        <div>Địa điểm</div>
-                                        <div>
-                                            {dataJob.city?.map((item, index) => (
-                                                <Tag key={index} color="gold">{item}</Tag>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Card>
-
-                        <Card title={<h3>Chi tiết công việc</h3>} >
-                            <div>
-                                {dataJob.tags?.map((item, index) => (
-                                    <Tag key={index}>{item}</Tag>
-                                ))}
-                            </div>
-                            <div>
-                                <div><h4>Mô tả công việc</h4></div>
-                                <div>{dataJob.descriptionDetail}</div>
-                            </div>
-                            <div>
-                                <List
-                                    size="small"
-                                    header={<div><h4>Yêu cầu công việc:</h4></div>}
-                                    dataSource={dataJob.requirements}
-                                    renderItem={item => <List.Item>{item}</List.Item>}
-                                />
-                            </div>
-                            <div>
-                                <List
-                                    size="small"
-                                    header={<div><h4>Phúc lợi:</h4></div>}
-                                    dataSource={dataJob.benefits}
-                                    renderItem={item => <List.Item>{item}</List.Item>}
-                                />
-                            </div>
-                        </Card>
+                        <Detail dataJob={dataJob} />
                     </Col>
                 </Row>
             )}

@@ -10,7 +10,7 @@ const items1 = [
     {
         key: "logout",
         icon: <LogoutOutlined />,
-        label: <Link to="logout">Đăng xuất</Link>,
+        label: <Link to="/logout">Đăng xuất</Link>,
         className: "menu__login"
     }
 ]

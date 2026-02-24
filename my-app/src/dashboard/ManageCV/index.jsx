@@ -73,7 +73,7 @@ function ManageCV() {
                     <>
                         <Tooltip title="Xem chi tiết CV">
                             <Button style={{ color: "black" }}>
-                                <Link to={`/detailCV/${record.id}`} ><EyeOutlined /></Link>
+                                <Link to={`detailCV/${record.id}`} ><EyeOutlined /></Link>
                             </Button>
                         </Tooltip>
     
@@ -87,7 +87,7 @@ function ManageCV() {
     return (
         <>
             <h2>Thông tin CV</h2>
-            {data.length > 0 && (
+            {data && (
                 <Table columns={columns} dataSource={data} rowKey="id" />
             )}
         </>
