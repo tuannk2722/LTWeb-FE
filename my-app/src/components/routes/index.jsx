@@ -2,6 +2,8 @@ import HomeAdmin from "../../dashboard/Home";
 import InforCompany from "../../dashboard/inforCompany";
 import ManageCV from "../../dashboard/ManageCV";
 import DetailCV from "../../dashboard/ManageCV/DetailCV";
+import ManageJob from "../../dashboard/ManageJob";
+import CreateJob from "../../dashboard/ManageJob/CreateJob";
 import CompanyDetail from "../../pages/CompanyDetail";
 import Home from "../../pages/Home";
 import JobDetail from "../../pages/JobDetail";
@@ -70,6 +72,14 @@ export const routes = [
                     {
                         path: "manageCV/detailCV/:id",
                         element: <DetailCV />
+                    },
+                    {
+                        path: "manageJob",
+                        element: <ManageJob />
+                    },
+                    {
+                        path: "manageJob/createJob",
+                        element: <CreateJob />
                     }
                 ]
             }

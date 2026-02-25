@@ -26,8 +26,8 @@ const items2 = [
         icon: <SnippetsOutlined />
     },
     {
-        key: "statusJobs",
-        label: <Link to="statusJobs">Quản lý việc làm</Link>,
+        key: "manageJob",
+        label: <Link to="manageJob">Quản lý việc làm</Link>,
         icon: <FormOutlined />
     },
     {
