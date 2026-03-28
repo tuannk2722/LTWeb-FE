@@ -1,26 +1,12 @@
 import { Button, Card, Col, DatePicker, Form, Input, message, Row, Select } from "antd";
-import { GetTime } from "../../../components/getTime";
 import { CreateCV } from "../../../components/services/cv";
 
 const { TextArea } = Input;
 
-function ApplyForm({ dataJob, idJob, idCompany }) {
+function ApplyForm({ dataJob, jobId, companyId }) {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
 
-    const showSuccess = () => {
-        messageApi.open({
-            type: "success",
-            content: "Nộp đơn thành công!"
-        });
-    };
-
-    const showError = () => {
-        messageApi.open({
-            type: "error",
-            content: "Nộp đơn không thành công!"
-        });
-    };
 
     const onFinish = async (values) => {
         try {
@@ -28,22 +14,17 @@ function ApplyForm({ dataJob, idJob, idCompany }) {
                 ...values,
                 city: values.city, 
                 birthday: values.birthday?.year(),
-                idJob: idJob,
-                idCompany: idCompany,
-                createAt: GetTime(),
+                jobId: jobId,
+                companyId: companyId,
             };
 
             const response = await CreateCV(payload);
-
-            if (response) {
-                showSuccess();
-                form.resetFields();
-            } else {
-                showError();
-            }
+            form.resetFields();
+            messageApi.success(response.message);
+            
         } catch (err) {
             console.error("Lỗi submit:", err);
-            showError();
+            messageApi.error(err);
         }
     };
 
@@ -106,9 +87,9 @@ function ApplyForm({ dataJob, idJob, idCompany }) {
                                 rules={[{ required: true, message: "Bắt buộc" }]}
                             >
                                 <Select placeholder="Chọn thành phố">
-                                    {dataJob?.city?.map((item, index) => (
-                                        <Select.Option key={index} value={item}>
-                                            {item}
+                                    {dataJob?.cities?.map(item => (
+                                        <Select.Option key={item._id} value={item.value}>
+                                            {item.value}
                                         </Select.Option>
                                     ))}
                                 </Select>

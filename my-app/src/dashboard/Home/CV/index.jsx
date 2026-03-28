@@ -10,14 +10,14 @@ function CV() {
     useEffect(() => {
         const fetchApi = async () => {
             const result = await GetCVByIdCompany(id);
-            if (result) {
+            if (result.cvs.length > 0) {
                 let quantity= {
                     total: 0,
                     readed: 0,
                     unread: 0
                 }
-                quantity.total = result.length;
-                result.forEach(item => {
+                quantity.total = result.cvs.length;
+                result.cvs.forEach(item => {
                     item.statusRead ? quantity.readed++ : quantity.unread++;
                 })
                 setData(quantity);
@@ -25,6 +25,7 @@ function CV() {
         }
         fetchApi();
     }, [])
+
 
     return (
         <>

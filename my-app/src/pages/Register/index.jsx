@@ -1,48 +1,30 @@
 import { Button, Col, Form, Input, message } from "antd";
-import { CheckExistValue, CreateInfoCompany } from "../../components/services/companies";
-import { GenerateToken } from "../../components/helpers/generateToken";
+import { CreateUser } from "../../components/services/companies";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function Register() {
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-    const onFinish = async (e) => {
-        const isExistEmail = await CheckExistValue("email", e.email);
-        const isExistPassword = await CheckExistValue("password", e.password);
-        if (isExistEmail.length > 0 && isExistPassword.length > 0) {
-            messageApi.open({
-                type: "error",
-                content: "Tài khoản hoặc mật khẩu đã tồn tại!"
-            })
-        } else {
-            let infoCompany = {
-                id: String(Date.now()),
-                companyName: "",
-                phone: "",
-                address: "",
-                workingTime: "",
-                website: "",
-                quantityPeople: 0,
-                description: "",
-                detail: "",
-                logo: "",
-                email: e.email,
-                password: e.password,
-                token: GenerateToken()
-            };
+    const onFinish = async (values) => {
+        setLoading(true);
+        delete values.password2;
+        try {
+            await CreateUser(values);
 
-            const response = await CreateInfoCompany(infoCompany);
+            messageApi.success("Register successful! You'll be redirected to the Login page.");
 
-            if (response) {
-                messageApi.open({
-                    type: "success",
-                    content: "Tạo tài khoản thành công!"
-                })
-                setTimeout(() => {
-                    navigate("/login");
-                }, 1500)
-            }
+            setTimeout(() => {
+                navigate("/login");
+            }, 1500);
+        } catch (e) {
+            // Lấy message lỗi từ NodeJS trả về (res.status(400).json({message: "..."}))
+            const errorMsg = e.response?.data?.message || "Register Failed!";
+            messageApi.error(errorMsg);
+        } finally {
+            setLoading(false); // Kết thúc load dù thành công hay thất bại
         }
     }
 
@@ -93,7 +75,7 @@ function Register() {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" style={{ width: "100%", marginTop: 20 }}>Đăng ký</Button>
+                            <Button loading={loading} type="primary" htmlType="submit" style={{ width: "100%", marginTop: 20 }}>Đăng ký</Button>
                         </Form.Item>
                     </Form>
                 </Col>

@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { getCookieValue } from "../../../components/helpers/cookie";
 import { GetAllTags } from "../../../components/services/tags";
 import { GetAllCities } from "../../../components/services/cities";
-import { GetTime } from "../../../components/getTime";
 import { CreateNewJob } from "../../../components/services/jobs";
 import { useNavigate } from "react-router-dom";
-import { GenerateToken } from "../../../components/helpers/generateToken";
 
 function CreateJob() {
     const id = getCookieValue("id");
@@ -14,19 +12,8 @@ function CreateJob() {
     const [dataCities, setDataCities] = useState({});
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-    const success = () => {
-        messageApi.open({
-            type: "success",
-            content: "Tạo mới công việc thành công!"
-        })
-    }
-    const error = () => {
-        messageApi.open({
-            type: "error",
-            content: "Tạo mới công việc thất bại!"
-        })
-    }
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -41,6 +28,7 @@ function CreateJob() {
     }, [])
 
     const onFinish = async (e) => {
+        setLoading(true);
         let cities = [];
         e.city.forEach(index => {
             const city = dataCities.find(item => item.key == index)
@@ -69,19 +57,21 @@ function CreateJob() {
 
         let finalData = {
             idCompany: id,
-            createAt: GetTime(),
             ...e,
-            token: GenerateToken()
         }
 
-        const response = await CreateNewJob(finalData);
-        if (response) {
-            success();
+        try {
+            const response = await CreateNewJob(finalData);
+            messageApi.success(response.message);
             setTimeout(() => {
                 navigate("/dashboard/manageJob");
-            }, 1500)
-        } else {
-            error();
+            }, 1500);
+
+        } catch(er) {
+            const errorMsg = er?.response?.data.message || "Create job failed!";
+            messageApi.error(errorMsg);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -192,7 +182,7 @@ function CreateJob() {
                     </Col>
                     <Col span={24}>
                         <Form.Item style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <Button style={{ width: 150, marginRight: 20 }} type="primary" htmlType="submit">Tạo mới</Button>
+                            <Button loading={loading} style={{ width: 150, marginRight: 20 }} type="primary" htmlType="submit">Tạo mới</Button>
                         </Form.Item>
                     </Col>
                 </Row>

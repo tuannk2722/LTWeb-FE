@@ -1,8 +1,11 @@
 import { Button, Card, Col, List, Row, Tag } from "antd";
 import { EuroOutlined, FieldTimeOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { getCookieValue } from "../../../components/helpers/cookie";
 
 function Detail(props) {
     const { dataJob } = props;
+
+    const isLogin = getCookieValue("id");
 
     const styleIconsJob = { fontSize: 25, marginTop: 10, marginRight: 10 }
 
@@ -29,7 +32,7 @@ function Detail(props) {
                         </span>
                         <div>
                             <div>Ngày cập nhật</div>
-                            <div><h4>{dataJob.updateAt}</h4></div>
+                            <div><h4>{dataJob.updatedAt}</h4></div>
                         </div>
                     </Col>
 
@@ -40,23 +43,25 @@ function Detail(props) {
                         <div>
                             <div>Địa điểm</div>
                             <div>
-                                {dataJob.city?.map((item, index) => (
-                                    <Tag key={index} color="gold">{item}</Tag>
+                                {dataJob.cities?.map(item => (
+                                    <Tag key={item._id} color="gold">{item.value}</Tag>
                                 ))}
                             </div>
                         </div>
                     </Col>
                 </Row>
 
-                <div>
-                    <Button type="primary" href="#applicationForm" style={{ width: "70%" }}>Ứng tuyển ngay</Button>
-                </div>
+                {!isLogin && (
+                    <div>
+                        <Button type="primary" href="#applicationForm" style={{ width: "70%" }}>Ứng tuyển ngay</Button>
+                    </div>
+                )}
             </Card>
 
             <Card title={<h3>Chi tiết tuyển dụng</h3>} >
                 <div>
-                    {dataJob.tags?.map((item, index) => (
-                        <Tag key={index}>{item}</Tag>
+                    {dataJob.tags?.map(item => (
+                        <Tag key={item._id}>{item.value}</Tag>
                     ))}
                 </div>
                 <div>

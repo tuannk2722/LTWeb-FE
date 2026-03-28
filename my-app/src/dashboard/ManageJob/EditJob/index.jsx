@@ -1,11 +1,11 @@
-import { Button, Checkbox, Col, Form, Input, message, Modal, Row, Select, Space, Switch, Tooltip } from "antd";
-import { useState } from "react";
+import { Button, Checkbox, Col, Form, Input, message, Modal, Row, Select, Switch, Tooltip } from "antd";
+import { useState, useEffect } from "react";
 import { EditOutlined } from "@ant-design/icons";
-import { GetTime } from "../../../components/getTime";
 import { getCookieValue } from "../../../components/helpers/cookie";
-import { EditInfoJob, GetJob } from "../../../components/services/jobs";
+import { EditInfoJob } from "../../../components/services/jobs";
 
 function EditJob({ record, onReload, dataCities, dataTags }) {
+
     const idCompany = getCookieValue("id");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,59 +13,70 @@ function EditJob({ record, onReload, dataCities, dataTags }) {
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
 
-    // Mở modal
+    // mở modal
     const handleOpen = () => {
         setIsModalOpen(true);
     };
 
-    // Đóng modal
+    // đóng modal
     const handleClose = () => {
         setIsModalOpen(false);
         setIsEditing(false);
         form.resetFields();
     };
 
-    const converted = {
+    // convert dữ liệu từ record -> form
+    const convertData = () => ({
         ...record,
+
+        tags: record.tags?.map(tag => tag.value),
+
+        cities: record.cities?.map(city => city.value),
+
         requirements: Array.isArray(record.requirements)
-            ? record.requirements.join("\n") : record.requirements,
+            ? record.requirements.join("\n")
+            : record.requirements,
+
         benefits: Array.isArray(record.benefits)
-            ? record.benefits.join("\n") : record.benefits,
-    }
+            ? record.benefits.join("\n")
+            : record.benefits
+    });
 
+    // cập nhật form khi mở modal
+    useEffect(() => {
+        if (isModalOpen && record) {
+            form.setFieldsValue(convertData());
+        }
+    }, [isModalOpen, record]);
 
-    // Submit form
+    // submit form
     const handleSubmit = async (values) => {
         try {
-            const job = await GetJob("token", record.token);
 
             const finalData = {
-                idCompany: idCompany,
-                updateAt: GetTime(),
-                token: record.token,
-                status: values.status ?? false,
                 ...values,
+                status: values.status ?? false,
+
                 requirements: values.requirements
                     ?.split("\n")
                     .map((item) => item.trim())
                     .filter((item) => item !== ""),
+
                 benefits: values.benefits
                     ?.split("\n")
                     .map((item) => item.trim())
                     .filter((item) => item !== "")
             };
 
-            const response = await EditInfoJob(job[0].id, finalData);
+            const response = await EditInfoJob(record._id, finalData);
 
-            if (response) {
-                messageApi.success("Cập nhật job thành công!");
-                onReload();
-                handleClose();
-            } else {
-                messageApi.error("Cập nhật job thất bại!");
-            }
-        } catch (error) {
-            messageApi.error("Có lỗi xảy ra!");
+            messageApi.success(response.message);
+
+            onReload();
+            handleClose();
+
+        } catch (err) {
+            messageApi.error(err?.response?.data?.message || "Edit job failed!");
         }
     };
 
@@ -88,6 +99,7 @@ function EditJob({ record, onReload, dataCities, dataTags }) {
                 footer={null}
                 width="90%"
             >
+
                 <div
                     style={{
                         display: "flex",
@@ -107,11 +119,13 @@ function EditJob({ record, onReload, dataCities, dataTags }) {
                     layout="vertical"
                     form={form}
                     onFinish={handleSubmit}
+                    onFinishFailed={(err) => console.log("Validation failed:", err)}
                     disabled={!isEditing}
-                    initialValues={converted}
                 >
+
                     <Row gutter={[20, 10]}>
-                        <Col xxl={16} xl={16} lg={16} md={24} sm={24} xs={24}>
+
+                        <Col span={16}>
                             <Form.Item
                                 label="Tên công việc"
                                 name="name"
@@ -121,7 +135,7 @@ function EditJob({ record, onReload, dataCities, dataTags }) {
                             </Form.Item>
                         </Col>
 
-                        <Col xxl={8} xl={8} lg={8} md={24} sm={24} xs={24}>
+                        <Col span={8}>
                             <Form.Item
                                 label="Mức lương"
                                 name="salary"
@@ -131,7 +145,7 @@ function EditJob({ record, onReload, dataCities, dataTags }) {
                             </Form.Item>
                         </Col>
 
-                        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
+                        <Col span={12}>
                             <Form.Item
                                 label="Tags"
                                 name="tags"
@@ -147,10 +161,10 @@ function EditJob({ record, onReload, dataCities, dataTags }) {
                             </Form.Item>
                         </Col>
 
-                        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
+                        <Col span={12}>
                             <Form.Item
                                 label="Thành phố"
-                                name="city"
+                                name="cities"
                                 rules={[{ required: true, message: "Bắt buộc" }]}
                             >
                                 <Select mode="multiple" allowClear>
@@ -222,9 +236,14 @@ function EditJob({ record, onReload, dataCities, dataTags }) {
                             >
                                 Lưu thay đổi
                             </Button>
-                            <Button onClick={handleClose}>Hủy</Button>
+
+                            <Button onClick={handleClose}>
+                                Hủy
+                            </Button>
                         </Col>
+
                     </Row>
+
                 </Form>
             </Modal>
         </>

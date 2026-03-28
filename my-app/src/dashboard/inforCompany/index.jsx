@@ -9,19 +9,17 @@ function InforCompany() {
     const [edit, setEdit] = useState(true);
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
-    
-    const success = () => {
-        messageApi.open({
-            type: "success",
-            content: "Cập nhật thông tin thành công!"
-        })
-    }
+    const [loading, setLoading] = useState(false);
+
 
     const fetchApi = async () => {
-        const result = await GetCompanyById(id);
-        if (result) {
+        try {
+            const result = await GetCompanyById(id);
             setData(result);
             form.setFieldsValue(result);
+
+        } catch(e) {
+            console.error(e);
         }
     }
 
@@ -36,12 +34,19 @@ function InforCompany() {
         fetchApi();
     }
 
-    const onFinish = async (e) => {
-        const response = await EditInfoCompany(id, e)
-        if (response) {
+    const onFinish = async (values) => {
+        setLoading(true);
+        try {
+            await EditInfoCompany(id, values);
             setEdit(!edit);
             fetchApi();
-            success();
+            messageApi.success("Update information successful!");
+
+        } catch(e) {
+            const errorMsg = e.response?.data?.message || "Update information failed!";
+            messageApi.error(errorMsg);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -71,16 +76,7 @@ function InforCompany() {
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col xxl={8} xl={8} lg={8} md={24} sm={24} xs={24}>
-                            <Form.Item
-                                label="Địa chỉ Email"
-                                name="email"
-                                rules={[{ required: true, message: "Bắt buộc" }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </Col>
-                        <Col xxl={8} xl={8} lg={8} md={24} sm={24} xs={24}>
+                        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
                             <Form.Item
                                 label="Số điện thoại"
                                 name="phone"
@@ -89,7 +85,7 @@ function InforCompany() {
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col xxl={8} xl={8} lg={8} md={24} sm={24} xs={24}>
+                        <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
                             <Form.Item
                                 label="Địa chỉ"
                                 name="address"
@@ -153,7 +149,7 @@ function InforCompany() {
                         </Col>
                         <Col span={24}>
                             <Form.Item style={{ display: "flex", justifyContent: "flex-end" }}>
-                                <Button style={{ width: 150, marginRight: 20 }} type="primary" htmlType="submit">Chỉnh sửa</Button>
+                                <Button loading={loading} style={{ width: 150, marginRight: 20 }} type="primary" htmlType="submit">Chỉnh sửa</Button>
                                 <Button style={{ width: 100 }} onClick={handleCancel} htmlType="submit">Hủy</Button>
                             </Form.Item>
                         </Col>

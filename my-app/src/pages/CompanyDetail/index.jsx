@@ -15,11 +15,18 @@ function CompanyDetail() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await GetCompanyById(id);
-            const allJobs = await GetJobByCompanyId(id);
-            if (result) {
+            try {
+                const result = await GetCompanyById(id);
                 setData(result);
-                setDataJobs(allJobs);
+
+                const allJobs = await GetJobByCompanyId(id);
+                const newDataJob = allJobs.filter(e => {
+                    return e.status === true;
+                })
+                setDataJobs(newDataJob);
+                
+            } catch(e) {
+                console.error(e);
             }
         }
         fetchApi();
@@ -83,14 +90,14 @@ function CompanyDetail() {
                         {dataJobs.length > 0 && (
                             <Row gutter={[5, 5]}>
                                 {dataJobs.map(item => (
-                                    <Col key={item.id} span={24} style={{ display: "flex", minHeight: 100, borderBottom: "1px solid #ddd" }}>
+                                    <Col key={item._id} span={24} style={{ display: "flex", minHeight: 100, borderBottom: "1px solid #ddd" }}>
                                         <div>
                                             <img src={data.logo} alt="Logo" style={{ width: 60, height: 60, objectFit: "cover", borderRadius: "20%", marginRight: 30 }} />
                                         </div>
                                         <div>
                                             <Tooltip title="Xem chi tiết công việc">
                                                 <div style={{ fontSize: 16 }}>
-                                                    <Link to={`/jobDetail/${item.id}`}>
+                                                    <Link to={`/jobDetail/${item._id}`}>
                                                         <b>{item.name}</b>
                                                     </Link>
                                                 </div>
@@ -99,11 +106,11 @@ function CompanyDetail() {
                                             <div>{item.salary}</div>
                                             <div>
                                                 Địa điểm:
-                                                {item.city.map((itemCity, index) => (
-                                                    <Tag key={index}>{itemCity}</Tag>
+                                                {item.cities.map(obj => (
+                                                    <Tag key={obj._id}>{obj.value}</Tag>
                                                 ))}
                                             </div>
-                                            <div>Ngày cập nhật: {item.createAt}</div>
+                                            <div>Ngày cập nhật: {item.createdAt}</div>
                                         </div>
                                     </Col>
                                 ))}

@@ -5,29 +5,19 @@ import { DeleteCVById } from "../../../components/services/cv";
 function DeleteCV(props) {
     const { record, onReload } = props;
     const [messageApi, contextHolder] = message.useMessage();
-
-    const success = () => {
-        messageApi.open({
-            type: "success",
-            content: "Xóa CV thành công!"
-        })
-    }
-    const error = () => {
-        messageApi.open({
-            type: "error",
-            content: "Xóa CV thất bại!"
-        })
-    }
+    // console.log(record)
 
     const confirm = async () => {
-        const delCV = await DeleteCVById(record.id);
-        if (delCV) {
-            success();
+        try {
+            const response = await DeleteCVById(record._id);
+            messageApi.success(response.message);
             setTimeout(() => {
                 onReload();
             }, 1500)
-        } else {
-            error();
+            
+        } catch(err) {
+            console.log(err);
+            messageApi.error(err.response.data.message);
         }
     }
 

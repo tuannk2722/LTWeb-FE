@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { GetJobById } from "../../../components/services/jobs";
 import { ChangeStatusRead, GetCVById } from "../../../components/services/cv";
 import { Row, Col, Card } from "antd";
 import Detail from "../../../pages/JobDetail/Detail";
+import { GetJobById } from "../../../components/services/jobs";
 
 function DetailCV() {
     const { id } = useParams();
@@ -12,11 +12,15 @@ function DetailCV() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const infoCV = await GetCVById(id);
-            const infoJob = await GetJobById(infoCV.idJob);
-            setDataCV(infoCV);
-            setDataJob(infoJob);
-            ChangeStatusRead(infoCV.id, { statusRead: true });
+            try {
+                const inforCV = await GetCVById(id);
+                setDataCV(inforCV.data);
+                const inforJob = await GetJobById(inforCV.data.jobId._id);
+                setDataJob(inforJob);
+                ChangeStatusRead(inforCV.data._id, { statusRead: true });
+            } catch(err) {
+                console.log(err.message);
+            }
         }
         fetchApi()
     }, [])
@@ -37,7 +41,7 @@ function DetailCV() {
                             <div style={{marginBottom: 10}} >Kinh nghiệm: <b>{dataCV.experience}</b></div>
                             <div style={{marginBottom: 10}} >Chứng chỉ: <b>{dataCV.certificate}</b></div>
                             <div style={{marginBottom: 10}} >Hoạt động: <b>{dataCV.activity}</b></div>
-                            <div>Ngày nộp CV: <b>{dataCV.createAt}</b></div>
+                            <div>Ngày nộp CV: <b>{dataCV.createdAt}</b></div>
                         </Card>
                     </Col>
 

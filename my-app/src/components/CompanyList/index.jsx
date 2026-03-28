@@ -12,20 +12,23 @@ function CompanyList() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await GetAllCompany();
-            if (result) {
-                setData(result);
+            try {
+                const res = await GetAllCompany();
+                setData(res);
+            } catch (error) {
+                console.error("Error fetching companies:", error);
             }
-        }
+        };
+
         fetchApi();
-    }, [])
+    }, []);
 
     return (
         <>
             {data.length > 0 && (
                 <Row gutter={[20, 20]}>
                     {data.map(item => (
-                        <Col key={item.id} xxl={6} xl={6} lg={8} md={8} sm={12} xs={24}>
+                        <Col key={item._id} xxl={6} xl={6} lg={8} md={8} sm={12} xs={24}>
                             <Card
                                 style={{ minHeight: 280 }}
                                 title={
@@ -38,7 +41,7 @@ function CompanyList() {
                                         <span>{item.companyName}</span>
                                     </div>
                                 }
-                                extra={<Link to={`/companyDetail/${item.id}`}>Xem chi tiết</Link>}
+                                extra={<Link to={`/companyDetail/${item._id}`}>Xem chi tiết</Link>}
                             >
                                 <div style={flexRow}>
                                     <span style={styleIconsCompany}>

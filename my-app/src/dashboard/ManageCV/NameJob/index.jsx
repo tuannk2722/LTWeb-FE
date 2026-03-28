@@ -6,9 +6,10 @@ function NameJob(props) {
     const [data, setData] = useState([]);
     const [error, setError] = useState(false);
 
+
     useEffect(() => {
         const fetchApi = async () => {
-            const job = await GetJobById(record.idJob);
+            const job = await GetJobById(record.jobId._id);
             if (job) {
                 setData(job);
             } else {
